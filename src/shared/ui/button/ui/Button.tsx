@@ -1,4 +1,4 @@
-import React from "react";
+import { FC } from "react";
 import { 
     TouchableOpacity,
     Text,
@@ -7,7 +7,7 @@ import {
 import { ICustomButtonProps } from "../type/props";
 import { styles } from './Button.styles';
 
-export const Button: React.FC<ICustomButtonProps> = ({
+export const Button: FC<ICustomButtonProps> = ({
     title,
     onPress,
     variant = "primary",

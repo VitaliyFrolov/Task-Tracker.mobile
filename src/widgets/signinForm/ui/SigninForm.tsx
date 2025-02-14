@@ -4,8 +4,8 @@ import {
     emailValidation, 
     PasswordField, 
     passwordValidation, 
-    saveToken, 
-    useLoginMutation 
+    useLoginMutation,
+    setCredentials
 } from "../../../features/auth";
 import { 
     View, 
@@ -21,29 +21,30 @@ import { useNavigation } from "@react-navigation/native";
 import { NavigationProp } from "../../../app/navigation";
 import { ISigninData } from "../../../features/auth";
 import { styles } from "./SigninForm.styles";
+import { useDispatch } from "react-redux";
 
 export const SigninForm: FC = () => {
-    const { control, handleSubmit, formState: { errors } } = useForm<ISigninData>();
-    const [login] = useLoginMutation();
-    const [isLoadingForm, setIsLoadingForm] = useState(false);
-    const navigation = useNavigation<NavigationProp<'Signin'>>();
+    const { control, handleSubmit, formState: { errors } } = useForm<ISigninData>({
+        defaultValues: {
+            email: "",
+            password: "",
+        },
+    });
+    const [login, { isLoading }] = useLoginMutation();
+    const navigation = useNavigation<NavigationProp<'Main'>>();
+    const dispatch = useDispatch();
 
     const onSubmit: SubmitHandler<ISigninData> = async (data) => {
-        setIsLoadingForm(true);
-
         try {
             const response = await login(data).unwrap();
 
             if (response.token) {
-                await saveToken(response.token);
+                dispatch(setCredentials(response.token));
+                navigation.navigate("Main");
             }
-        } catch (error) {
-            Alert.alert(
-                "Ошибка", 
-                "Во время входа произошла ошибка, попробуйте позднее"
-            );
-        } finally {
-            setIsLoadingForm(false);
+        } catch (error: any) {
+            const errorMessage = error.data?.message || "Во время входа произошла ошибка, попробуйте позднее";
+            Alert.alert("Ошибка", errorMessage);
         }
     };
 
@@ -75,9 +76,9 @@ export const SigninForm: FC = () => {
             </View>
 
             <Button
-                title={isLoadingForm ? "Вход..." : "Продолжить"} 
+                title={isLoading ? "Вход..." : "Продолжить"} 
                 onPress={handleSubmit(onSubmit)} 
-                disabled={isLoadingForm} 
+                disabled={isLoading} 
             />
 
             <Text style={styles.textCenter}>

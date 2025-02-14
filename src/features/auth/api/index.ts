@@ -18,10 +18,14 @@ export const authApi = createApi({
                 body,
             }),
         }),
+        profile: builder.query({
+            query: () => 'user',
+        })
     }),
 });
 
 export const { 
     useRegisterMutation,
     useLoginMutation,
+    useProfileQuery,
 } = authApi;

@@ -1,11 +1,10 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { 
     emailValidation,
     ISignupData, 
     PasswordField, 
     passwordValidation, 
-    saveToken, 
     useRegisterMutation
 } from "../../../features/auth";
 import { 
@@ -21,6 +20,8 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { NavigationProp } from "../../../app/navigation";
 import { styles } from "./SignupForm.styles";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "../../../features/auth";
 
 export const SignupForm: FC = () => {
     const { 
@@ -28,31 +29,29 @@ export const SignupForm: FC = () => {
         handleSubmit, 
         watch,
         formState: { errors } 
-    } = useForm<ISignupData>();
+    } = useForm<ISignupData>({
+        defaultValues: {
+            email: "",
+            password: "",
+            repeatPassword: "",
+        },
+    });
 
-    const [ register ] = useRegisterMutation();
-    const [ isLoadingForm, setIsLoadingForm ] = useState(false);
-    const navigation = useNavigation<NavigationProp<'Signup'>>();
-
-    const password = watch("password");
+    const [register, { isLoading }] = useRegisterMutation();
+    const navigation = useNavigation<NavigationProp<'Main'>>();
+    const dispatch = useDispatch();
+    const password = watch("password") || "";
 
     const onSubmit: SubmitHandler<ISignupData> = async (data) => {
-        setIsLoadingForm(true);
-
         try {
             const response = await register(data).unwrap();
-
             if (response.token) {
-                await saveToken(response.token);
+                await dispatch(setCredentials(response.token));
+                navigation.navigate("Main");
             }
-        } catch (error) {
-            console.error("Registration error:", error);
-            Alert.alert(
-                "Ошибка", 
-                "Во время регистрации произошла ошибка, попробуйте позднее"
-            );
-        } finally {
-            setIsLoadingForm(false);
+        } catch (error: any) {
+            const errorMessage = error.data?.message || "Во время регистрации произошла ошибка, попробуйте позднее";
+            Alert.alert("Ошибка", errorMessage);
         }
     };
 
@@ -98,9 +97,9 @@ export const SignupForm: FC = () => {
             </View>
 
             <Button
-                title={isLoadingForm ? "Регистрация..." : "Продолжить"} 
+                title={isLoading ? "Регистрация..." : "Продолжить"} 
                 onPress={handleSubmit(onSubmit)} 
-                disabled={isLoadingForm} 
+                disabled={isLoading} 
             />
 
             <Text style={styles.textCenter}>

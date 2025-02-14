@@ -1,4 +1,5 @@
 import { StackNavigationProp } from "@react-navigation/stack";
+import { store } from "../store";
 
 export type RootStackParamList = {
     Main: undefined;
@@ -8,3 +9,6 @@ export type RootStackParamList = {
 };
 
 export type NavigationProp<T extends keyof RootStackParamList> = StackNavigationProp<RootStackParamList, T>;
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

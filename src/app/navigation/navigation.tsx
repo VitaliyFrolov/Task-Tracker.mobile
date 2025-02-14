@@ -1,10 +1,13 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer } from "@react-navigation/native";
 import { SigninScreen } from "../../screens/signinScreen";
 import { MainScreen } from "../../screens/mainScreen";
 import { SignupScreen } from "../../screens/signupScreen";
+import { useDispatch, useSelector } from "react-redux";
 import { View, ActivityIndicator } from "react-native";
-import { useAuth } from "../context/AuthContext";
+import { AppDispatch, RootState } from "./types";
+import { useEffect } from "react";
+import { loadToken } from "../../features/auth/store";
 
 const Stack = createStackNavigator();
 
@@ -22,9 +25,14 @@ const PrivateRoutes = () => (
 );
 
 export const AppNavigator = () => {
-    const { isAuthenticated, loading } = useAuth();
+    const dispatch = useDispatch<AppDispatch>();
+    const { token, isLoading } = useSelector((state: RootState) => state.auth);
 
-    if (loading) {
+    useEffect(() => {
+        dispatch(loadToken());
+    }, [dispatch]);
+
+    if (isLoading) {
         return (
             <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
                 <ActivityIndicator size="large" color="#6200ea" />
@@ -34,7 +42,7 @@ export const AppNavigator = () => {
 
     return (
         <NavigationContainer>
-            {isAuthenticated ? <PrivateRoutes /> : <PublicRoutes />}
+            {token ? <PrivateRoutes /> : <PublicRoutes />}
         </NavigationContainer>
     );
 };
