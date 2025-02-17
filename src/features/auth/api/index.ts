@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { saveToken, removeToken } from "../storage";
+import { saveToken, removeToken } from "../model/storage";
 
 export const authApi = createApi({
     reducerPath: "authApi",

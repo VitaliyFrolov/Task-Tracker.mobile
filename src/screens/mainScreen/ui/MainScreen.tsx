@@ -6,13 +6,7 @@ import { useProfileQuery } from "../../../features/auth";
 
 export const MainScreen: FC = () => {
     const { data, error, isLoading } = useProfileQuery({});
-
-    if(error) {
-        console.log(error);
-    }
-
-    console.log(data)
-
+    
     return (
         <View style={styles.container}>
             <Header />

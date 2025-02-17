@@ -4,6 +4,14 @@ export {
     passwordValidation,
 } from './model/validation';
 
+// Storage
+export {
+    loadToken,
+    getToken,
+    saveToken,
+    removeToken,
+} from './model/storage';
+
 // Store
 export {
     setCredentials,
@@ -11,14 +19,6 @@ export {
     setLoading,
     authReducer,
 } from './store';
-
-// Storage
-export {
-    loadToken,
-    getToken,
-    saveToken,
-    removeToken,
-} from './storage';
 
 // Types
 export type { ISigninData, ISignupData } from './type';

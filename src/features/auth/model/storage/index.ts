@@ -1,4 +1,4 @@
-import { setCredentials, setError, setLoading } from "../store";
+import { setCredentials, setError, setLoading } from "../../store";
 import * as SecureStore from "expo-secure-store";
 
 export const loadToken = () => async (dispatch: any) => {
