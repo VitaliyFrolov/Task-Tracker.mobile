@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
         marginVertical: 5,
     },
     primary: {
-        backgroundColor: "#c3dafe",
+        backgroundColor: "#007bff",
     },
     textButton: {
         backgroundColor: "transparent",

@@ -1,30 +1,24 @@
 import { FC } from "react";
-import { useDispatch } from "react-redux";
-import { View, Text } from "react-native";
-import { Button } from "../../../shared/ui";
+import { View, Text, ActivityIndicator } from "react-native";
 import { styles } from './MainScreen.styles';
-import { clearCredentials } from "../../../features/auth/store";
-import { useNavigation } from "@react-navigation/native";
-import { NavigationProp } from "../../../app/navigation";
+import { Header } from "../../../widgets/header";
+import { useProfileQuery } from "../../../features/auth";
 
 export const MainScreen: FC = () => {
-    const dispatch = useDispatch();
-    const navigation = useNavigation<NavigationProp<'Signin'>>();
+    const { data, error, isLoading } = useProfileQuery({});
 
-    const handleLogout = () => {
-        dispatch(clearCredentials()); 
-        navigation.navigate("Signin");
-    };
+    if(error) {
+        console.log(error);
+    }
+
+    console.log(data)
 
     return (
         <View style={styles.container}>
-            <Text>
-                Hello Mobile!
-            </Text>
-            <Button
-                title="Разлогиниться"
-                onPress={handleLogout} 
-            />
+            <Header />
+            {isLoading && <ActivityIndicator size="large" color="#6200ea" />}
+            {error && <Text style={{ color: "red" }}>Ошибка загрузки профиля</Text>}
+            {data && <Text>Привет, {data.email}!</Text>}
         </View>
     );
 };

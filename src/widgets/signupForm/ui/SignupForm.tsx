@@ -37,7 +37,7 @@ export const SignupForm: FC = () => {
         },
     });
 
-    const [register, { isLoading }] = useRegisterMutation();
+    const [ register, { isLoading } ] = useRegisterMutation();
     const navigation = useNavigation<NavigationProp<'Main'>>();
     const dispatch = useDispatch();
     const password = watch("password") || "";
@@ -46,7 +46,7 @@ export const SignupForm: FC = () => {
         try {
             const response = await register(data).unwrap();
             if (response.token) {
-                await dispatch(setCredentials(response.token));
+                dispatch(setCredentials(response.token));
                 navigation.navigate("Main");
             }
         } catch (error: any) {
@@ -96,11 +96,12 @@ export const SignupForm: FC = () => {
                 {errors.repeatPassword && <Text style={styles.errorText}>{errors.repeatPassword.message}</Text>}
             </View>
 
-            <Button
-                title={isLoading ? "Регистрация..." : "Продолжить"} 
+            <Button 
                 onPress={handleSubmit(onSubmit)} 
                 disabled={isLoading} 
-            />
+            >
+                {isLoading ? "Регистрация..." : "Продолжить"}
+            </Button>
 
             <Text style={styles.textCenter}>
                 Уже есть аккаунт?{" "}

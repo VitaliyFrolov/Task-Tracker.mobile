@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { 
     emailValidation, 
@@ -30,7 +30,7 @@ export const SigninForm: FC = () => {
             password: "",
         },
     });
-    const [login, { isLoading }] = useLoginMutation();
+    const [ login, { isLoading } ] = useLoginMutation();
     const navigation = useNavigation<NavigationProp<'Main'>>();
     const dispatch = useDispatch();
 
@@ -75,11 +75,12 @@ export const SigninForm: FC = () => {
                 {errors.password && <Text style={styles.errorText}>{errors.password.message}</Text>}
             </View>
 
-            <Button
-                title={isLoading ? "Вход..." : "Продолжить"} 
+            <Button 
                 onPress={handleSubmit(onSubmit)} 
-                disabled={isLoading} 
-            />
+                disabled={isLoading}
+             >
+                {isLoading ? "Вход..." : "Продолжить"} 
+            </Button>
 
             <Text style={styles.textCenter}>
                 Еще нет аккаунта?{" "}

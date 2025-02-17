@@ -8,7 +8,7 @@ import { ICustomButtonProps } from "../type/props";
 import { styles } from './Button.styles';
 
 export const Button: FC<ICustomButtonProps> = ({
-    title,
+    children,
     onPress,
     variant = "primary",
     disabled = false,
@@ -22,14 +22,13 @@ export const Button: FC<ICustomButtonProps> = ({
                 disabled && styles.disabled,
             ]}
             onPress={onPress}
-            activeOpacity={0.7}
             disabled={disabled || isLoading}
         >
             {isLoading ? (
                 <ActivityIndicator color={variant === "primary" ? "#fff" : "#6200ea"} />
             ) : (
                 <Text style={[styles.text, variant === "primary" ? styles.textPrimary : styles.textText]}>
-                    {title}
+                    {children}
                 </Text>
             )}
         </TouchableOpacity>

@@ -1,14 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import * as SecureStore from "expo-secure-store";
 
 interface AuthState {
     token: string | null;
     isLoading: boolean;
+    error: string | null;
 }
 
 const initialState: AuthState = {
     token: null,
-    isLoading: true,
+    isLoading: false,
+    error: null,
 };
 
 const authSlice = createSlice({
@@ -17,6 +18,7 @@ const authSlice = createSlice({
     reducers: {
         setCredentials: (state, action: PayloadAction<string>) => {
             state.token = action.payload;
+            state.error = null;
         },
         clearCredentials: (state) => {
             state.token = null;
@@ -24,28 +26,12 @@ const authSlice = createSlice({
         setLoading: (state, action: PayloadAction<boolean>) => {
             state.isLoading = action.payload;
         },
+        setError: (state, action: PayloadAction<string>) => {
+            state.error = action.payload;
+        },
     },
 });
 
-export const { setCredentials, clearCredentials, setLoading } = authSlice.actions;
-
-export const loadToken = () => async (dispatch: any) => {
-    dispatch(setLoading(true));
-
-    const token = await SecureStore.getItemAsync("authToken");
-    if (token) {
-        dispatch(setCredentials(token));
-    }
-    
-    dispatch(setLoading(false));
-};
-
-export const saveToken = async (token: string) => {
-    await SecureStore.setItemAsync("authToken", token);
-};
-
-export const removeToken = async () => {
-    await SecureStore.deleteItemAsync("authToken");
-};
+export const { setCredentials, clearCredentials, setLoading, setError } = authSlice.actions;
 
 export const authReducer = authSlice.reducer;

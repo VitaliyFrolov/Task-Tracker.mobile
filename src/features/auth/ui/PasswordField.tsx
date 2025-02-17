@@ -48,6 +48,8 @@ export const PasswordField = <T extends FieldValues>({
                             onChangeText={onChange}
                             value={value}
                             style={styles.input}
+                            textContentType="none"
+                            autoComplete="off"
                         />
                         {secureTextEntry && (
                             <TouchableOpacity 

@@ -1,5 +1,5 @@
 export interface ICustomButtonProps {
-    title: string;
+    children: string;
     onPress: () => void;
     variant?: "primary" | "text";
     disabled?: boolean;

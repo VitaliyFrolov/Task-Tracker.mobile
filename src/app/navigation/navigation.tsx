@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { View, ActivityIndicator } from "react-native";
 import { AppDispatch, RootState } from "./types";
 import { useEffect } from "react";
-import { loadToken } from "../../features/auth/store";
+import { loadToken } from "../../features/auth";
 
 const Stack = createStackNavigator();
 

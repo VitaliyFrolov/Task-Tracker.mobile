@@ -12,6 +12,14 @@ export {
     authReducer,
 } from './store';
 
+// Storage
+export {
+    loadToken,
+    getToken,
+    saveToken,
+    removeToken,
+} from './storage';
+
 // Types
 export type { ISigninData, ISignupData } from './type';
 
